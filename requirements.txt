@@ -1,0 +1,10 @@
+torch
+# transformers
+open_clip_torch
+Pillow
+requests
+fastapi
+uvicorn
+jinja2
+scikit-learn
+numpy

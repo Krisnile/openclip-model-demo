@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLIP Image Search</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f4f7f6; color: #333; }
+        .container { max-width: 960px; margin: auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; }
+        .search-form { display: flex; margin-bottom: 40px; justify-content: center; }
+        .search-form input[type="text"] { 
+            flex-grow: 1; 
+            padding: 12px 15px; 
+            border: 1px solid #ced4da; 
+            border-radius: 6px; 
+            font-size: 1.1em;
+            max-width: 500px; /* Limit input width */
+        }
+        .search-form button { 
+            padding: 12px 25px; 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            margin-left: 10px; 
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+        .search-form button:hover {
+            background-color: #0056b3;
+        }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 25px; }
+        .results { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+            padding: 10px;
+        }
+        .result-item { 
+            border: 1px solid #e9ecef; 
+            padding: 18px; 
+            border-radius: 10px; 
+            text-align: center; 
+            background-color: #fcfcfc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .result-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        .result-item img { 
+            max-width: 100%; 
+            height: 200px; 
+            object-fit: cover; 
+            border-radius: 6px; 
+            margin-bottom: 15px; 
+            display: block; /* Ensures image takes full width of its container */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .result-item h3 { 
+            margin-top: 0; 
+            font-size: 1.2em; 
+            color: #34495e; 
+            margin-bottom: 8px;
+        }
+        .result-item p { 
+            font-size: 0.95em; 
+            color: #7f8c8d; 
+            margin-bottom: 0;
+        }
+        .no-results {
+            text-align: center;
+            font-size: 1.2em;
+            color: #6c757d;
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Search</h1>
+        <form class="search-form" action="/search" method="get">
+            <input type="text" name="query" placeholder="Enter your search query..." value="{{ query if query else '' }}">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if results %}
+            <h2>Search Results for "{{ query }}"</h2>
+            <div class="results">
+                {% for result in results %}
+                    <div class="result-item">
+                        <img src="{{ result.url }}" alt="{{ result.title }}">
+                        <h3>{{ result.title }}</h3>
+                        <p>Similarity: {{ "%.2f" % (result.similarity * 100) }}%</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% elif query %}
+            <p class="no-results">No results found for "{{ query }}".</p>
+        {% endif %}
+    </div>
+</body>
+</html>
